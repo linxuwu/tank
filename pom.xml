@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.linxuwu</groupId>
-  <artifactId>tamk</artifactId>
+  <artifactId>tank</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>Maven</name>
