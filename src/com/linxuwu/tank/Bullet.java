@@ -7,7 +7,7 @@ import java.awt.*;
 
 @Getter
 @Setter
-public class Bullet {
+public class Bullet extends BaseBullet {
 
     /**
      * 子弹速度
@@ -35,12 +35,11 @@ public class Bullet {
      */
     private Dir dir;
 
-    /**
-     * 存活
-     */
-    private boolean living = true;
+
     TankFrame tf = null;
     private Group group = Group.BAD;
+
+    GameFactory gameFactory = new DefaultGameFactory();
 
 
     public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
@@ -56,6 +55,7 @@ public class Bullet {
         rect.height = HEIGHT;
     }
 
+    @Override
     public void paint(Graphics g) {
         switch (dir) {
             case LEFT:
@@ -107,8 +107,9 @@ public class Bullet {
      * 碰撞检测
      * @param tank
      */
-    public void collideWith(Tank tank) {
-        if(this.group == tank.getGroup()) {
+    @Override
+    protected void collideWith(BaseTank tank) {
+        if(this.group == tank.group) {
             return;
         }
 
@@ -119,9 +120,9 @@ public class Bullet {
         if(rect.intersects(tank.rect)) {
             tank.die();
             this.die();
-            int eX = tank.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
-            int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-            tf.explodes.add(new Explode(eX, eY, tf));
+            int eX = tank.x + Tank.WIDTH/2 - Explode.WIDTH/2;
+            int eY = tank.y + Tank.HEIGHT/2 - Explode.HEIGHT/2;
+            tf.explodes.add(gameFactory.createExplode(eX, eY, tf));
         }
     }
 

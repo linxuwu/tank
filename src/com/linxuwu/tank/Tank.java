@@ -11,23 +11,24 @@ import java.util.Random;
 /**
  * 封装：合适的方法放在合适的类中
  */
+
 @Getter
 @Setter
-public class Tank {
-    private int x, y;
-    private Dir dir = Dir.DOWN;
+public class Tank extends BaseTank{
+
     private static final int SPEED = 2;
 
-    Rectangle rect = new Rectangle();
 
-    private boolean moving = true;
+
+
     private TankFrame tf = null;
     private Random random = new Random();
-    private Group group = Group.BAD;
-    private boolean living = true;
+
 
     public static final int WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankD.getHeight();
+
+    private GameFactory gameFactory = new DefaultGameFactory();
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -43,10 +44,10 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        Iterator<Tank> it = tf.tanks.iterator();
+        Iterator<BaseTank> it = tf.tanks.iterator();
         while (it.hasNext()) {
-            Tank tank = it.next();
-            if(!tank.isLiving()) {
+            BaseTank tank = it.next();
+            if(!tank.living) {
                 it.remove();
             }
         }
@@ -114,7 +115,7 @@ public class Tank {
     public void fire() {
         int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
         int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-        tf.bullets.add(new Bullet(bX, bY, this.dir, this.group, tf));
+        tf.bullets.add(gameFactory.createBullet(bX, bY, this.dir, this.group, tf));
     }
 
     public void die() {
