@@ -41,14 +41,15 @@ public class Bullet {
     private boolean living = true;
     TankFrame tf = null;
     private Group group = Group.BAD;
+    GameModel gm;
 
 
-    public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
+    public Bullet(int x, int y, Dir dir, Group group, GameModel gm) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
+        this.gm = gm;
 
         rect.x = this.x;
         rect.y = this.y;
@@ -121,7 +122,7 @@ public class Bullet {
             this.die();
             int eX = tank.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
             int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-            tf.explodes.add(new Explode(eX, eY, tf));
+            gm.explodes.add(new Explode(eX, eY, gm));
         }
     }
 

@@ -21,20 +21,21 @@ public class Tank {
     Rectangle rect = new Rectangle();
 
     private boolean moving = true;
-    private TankFrame tf = null;
     private Random random = new Random();
     private Group group = Group.BAD;
     private boolean living = true;
 
+    GameModel gm;
+
     public static final int WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankD.getHeight();
 
-    public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
+    public Tank(int x, int y, Dir dir, Group group, GameModel gm) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
+        this.gm = gm ;
 
         rect.x = this.x;
         rect.y = this.y;
@@ -43,7 +44,7 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        Iterator<Tank> it = tf.tanks.iterator();
+        Iterator<Tank> it = gm.tanks.iterator();
         while (it.hasNext()) {
             Tank tank = it.next();
             if(!tank.isLiving()) {
@@ -114,7 +115,7 @@ public class Tank {
     public void fire() {
         int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
         int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-        tf.bullets.add(new Bullet(bX, bY, this.dir, this.group, tf));
+        gm.bullets.add(new Bullet(bX, bY, this.dir, this.group, gm));
     }
 
     public void die() {
