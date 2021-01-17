@@ -7,7 +7,7 @@ import java.awt.*;
 
 @Getter
 @Setter
-public class Bullet {
+public class Bullet extends GameObject {
 
     /**
      * 子弹速度
@@ -108,9 +108,9 @@ public class Bullet {
      * 碰撞检测
      * @param tank
      */
-    public void collideWith(Tank tank) {
+    public boolean collideWith(Tank tank) {
         if(this.group == tank.getGroup()) {
-            return;
+            return false;
         }
 
         //TODO: rect来记录子弹的位置
@@ -122,8 +122,10 @@ public class Bullet {
             this.die();
             int eX = tank.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
             int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-            gm.explodes.add(new Explode(eX, eY, gm));
+            gm.add(new Explode(eX, eY, gm));
+            return true;
         }
+        return false;
     }
 
     private void die() {

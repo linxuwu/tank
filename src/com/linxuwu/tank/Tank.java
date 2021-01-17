@@ -13,7 +13,7 @@ import java.util.Random;
  */
 @Getter
 @Setter
-public class Tank {
+public class Tank extends GameObject {
     private int x, y;
     private Dir dir = Dir.DOWN;
     private static final int SPEED = 2;
@@ -26,6 +26,8 @@ public class Tank {
     private boolean living = true;
 
     GameModel gm;
+
+    int oldX, oldY;
 
     public static final int WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankD.getHeight();
@@ -44,13 +46,13 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        Iterator<Tank> it = gm.tanks.iterator();
-        while (it.hasNext()) {
-            Tank tank = it.next();
-            if(!tank.isLiving()) {
-                it.remove();
-            }
-        }
+//        Iterator<Tank> it = gm.tanks.iterator();
+//        while (it.hasNext()) {
+//            Tank tank = it.next();
+//            if(!tank.isLiving()) {
+//                it.remove();
+//            }
+//        }
         switch (dir) {
             case LEFT:
                 g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
@@ -68,7 +70,17 @@ public class Tank {
         move();
     }
 
+    public void back() {
+        x = oldX;
+        y = oldY;
+    }
+
     private void move() {
+
+        //记录移动之前的位置
+        oldX = x;
+        oldY = y;
+
         if(!moving) return;
 
         switch (dir) {
@@ -111,14 +123,21 @@ public class Tank {
         this.dir = Dir.values()[random.nextInt(4)];
     }
 
+    public Rectangle getRect() {
+        return rect;
+    }
 
     public void fire() {
         int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
         int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-        gm.bullets.add(new Bullet(bX, bY, this.dir, this.group, gm));
+        gm.add(new Bullet(bX, bY, this.dir, this.group, gm));
     }
 
     public void die() {
         this.living = false;
+    }
+
+    public void stop() {
+        moving = false;
     }
 }
